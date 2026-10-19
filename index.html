@@ -40,6 +40,9 @@ body{background:linear-gradient(180deg,#EEF4FF 0%,#FFFFFF 55%);color:#1B2333;fon
 #table{flex:1;min-height:0;border-radius:24px;background:#EAF1FF;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(8px,1.6vh,16px);padding:10px;text-align:center;overflow:hidden}
 #table .cap{font-size:13px;color:#55607A}
 #table .big{background:#fff;border-radius:999px;padding:6px 18px;font-weight:700;font-size:16px;box-shadow:0 1px 3px rgba(30,50,90,.1)}
+#table{position:relative}
+#table .bm{position:absolute;top:10px;right:12px;display:flex;gap:3px;opacity:.9}
+@media (min-width:561px){#table .bm{display:none}}
 #table .hint{font-size:13px;color:#55607A;line-height:1.5}
 #table .play{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:100%}
 #table .bids{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
@@ -397,6 +400,13 @@ function renderTable(){
     t.innerHTML=`<div class="cap">新一輪</div><div class="big">${S.turn==0?'你先出牌':NAMES[S.turn]+'先出牌'}</div><div class="hint">可以出任何合法牌型</div>`;
   }
 }
+function addBM(){
+  const t=$('#table');
+  if(S.phase!='play'||S.landlord<0)return;
+  const d=document.createElement('div');d.className='bm';d.title='底牌';
+  S.bottom.forEach(c=>d.appendChild(cardEl(c,.38,true)));
+  t.appendChild(d);
+}
 function renderStatus(){
   const inGame=(S.phase=='bid'||S.phase=='play'),me=roleOf(0);
   const txt=!inGame?'':S.phase=='bid'?'最高分者當地主':(S.turn==0?'輪到你出牌':NAMES[S.turn]+'思考中…');
@@ -439,7 +449,7 @@ function renderBtns(){
   else{add('不出',humanPass,!S.last);add('提示',humanHint);add('出牌',humanPlay,false,'pri');}
 }
 function render(){
-  renderTop();chip(1);chip(2);renderStatus();renderBtns();renderHand();renderTable();
+  renderTop();chip(1);chip(2);renderStatus();renderBtns();renderHand();renderTable();addBM();
   if(S.phase=='end'){
     const r=S.result,me=r.lw?S.landlord==0:S.landlord!=0;
     $('#ovt').textContent=me?'🎉 你贏了':'😢 你輸了';
