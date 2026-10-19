@@ -397,7 +397,7 @@ function renderHand(){
   rows.forEach((row,ri)=>row.forEach((c,i)=>{
     const d=cardEl(c,cw/64);
     d.style.left=(off+i*step)+'px';d.style.top=(raise+ri*ch*OVER)+'px';d.style.zIndex=ri+1;
-    if(S.sel.has(c.id)){d.classList.add('sel');d.style.zIndex=9;}
+    if(S.sel.has(c.id)){d.classList.add('sel');}
     d.onclick=()=>{S.sel.has(c.id)?S.sel.delete(c.id):S.sel.add(c.id);renderHand();};
     box.appendChild(d);
   }));
