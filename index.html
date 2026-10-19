@@ -51,6 +51,9 @@ body{background:linear-gradient(180deg,#EEF4FF 0%,#FFFFFF 55%);color:#1B2333;fon
 .btn{flex:1 1 0;min-width:0;border:0;border-radius:16px;background:#fff;color:#1B2333;font:700 17px 'Noto Sans TC',system-ui,sans-serif;box-shadow:0 1px 4px rgba(30,50,90,.14);cursor:pointer}
 .btn.pri{background:#2557E6;color:#fff;font-size:18px;box-shadow:0 6px 12px rgba(37,87,230,.3)}
 .btn:disabled{opacity:.35;cursor:default}
+.tb{display:flex;gap:10px;width:100%;max-width:420px}
+.tbtn{flex:1 1 0;min-width:0;height:clamp(64px,10vh,88px);border:0;border-radius:20px;background:#fff;color:#1B2333;font:800 24px 'Noto Sans TC',system-ui,sans-serif;box-shadow:0 1px 4px rgba(30,50,90,.14);cursor:pointer}
+.tbtn.pri{background:#2557E6;color:#fff;box-shadow:0 8px 16px rgba(37,87,230,.3)}
 #handbox{position:relative;flex:none;width:100%}
 .cd{position:absolute;width:calc(64px*var(--k,1));height:calc(92px*var(--k,1));background:#fff;border:1px solid #D9E1EE;border-radius:calc(10px*var(--k,1));box-shadow:0 2px 6px rgba(30,50,90,.14);color:#1B2333;user-select:none;-webkit-user-select:none;transition:transform .12s,box-shadow .12s;cursor:pointer}
 .cd.rel{position:relative;cursor:default}
@@ -349,10 +352,14 @@ function renderTop(){
 function renderTable(){
   const t=$('#table');
   if(S.phase=='bid'){
-    t.innerHTML=`<div class="cap">叫地主</div><div class="bids">`+[0,1,2].map(i=>
-      `<span class="pill">${NAMES[i]} <b>${S.say[i]||'—'}</b></span>`).join('')+`</div>`+
-      `<div class="big">${S.turn==0?'輪到你叫分':NAMES[S.turn]+'叫分中…'}</div>`+
-      `<div class="hint">叫分最高者當地主,<br>拿到 3 張底牌</div>`;
+    t.innerHTML=`<div class="cap">叫地主${S.highSeat>=0?' · 目前最高 '+NAMES[S.highSeat]+' '+S.highBid+'分':''}</div>`+
+      `<div class="big">${S.turn==0?'輪到你叫分':NAMES[S.turn]+'叫分中…'}</div>`;
+    if(S.turn==0){
+      const tb=document.createElement('div');tb.className='tb';
+      const add=(txt,v,pri)=>{const x=document.createElement('button');x.className='tbtn'+(pri?' pri':'');x.textContent=txt;x.onclick=()=>bid(v);tb.appendChild(x);};
+      add('不叫',0,false);for(let i=S.highBid+1;i<=3;i++)add(i+'分',i,i==3);
+      t.appendChild(tb);
+    }
     return;
   }
   if(S.phase=='redeal'){t.innerHTML=`<div class="big">三人都不叫,重新發牌…</div>`;return;}
@@ -375,7 +382,7 @@ function renderTable(){
 }
 function renderStatus(){
   const inGame=(S.phase=='bid'||S.phase=='play'),me=roleOf(0);
-  const txt=!inGame?'':S.phase=='bid'?(S.turn==0?'輪到你叫分':NAMES[S.turn]+'叫分中'):(S.turn==0?'輪到你出牌':NAMES[S.turn]+'思考中…');
+  const txt=!inGame?'':S.phase=='bid'?'最高分者當地主':(S.turn==0?'輪到你出牌':NAMES[S.turn]+'思考中…');
   $('#status').innerHTML=`<div class="a"><span class="tag t-blue">你${me?' · '+me:''}</span><span>${txt}</span></div>`+
     `<div class="b">剩 <b>${S.hands[0].length}</b> 張</div>`;
 }
@@ -408,7 +415,7 @@ function renderHand(){
   }));
 }
 function renderBtns(){
-  const b=$('#btns');b.innerHTML='';
+  const b=$('#btns');b.innerHTML='';b.style.display=S.phase=='bid'?'none':'';
   if(S.turn!=0||(S.phase!='bid'&&S.phase!='play'))return;
   const add=(t,fn,dis,cls)=>{const x=document.createElement('button');x.className='btn'+(cls?' '+cls:'');x.textContent=t;x.disabled=!!dis;x.onclick=fn;b.appendChild(x);};
   if(S.phase=='bid'){add('不叫',()=>bid(0));for(let i=1;i<=3;i++)add(i+'分',()=>bid(i),i<=S.highBid,i==3?'pri':'');}
