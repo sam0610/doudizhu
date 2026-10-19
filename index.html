@@ -13,7 +13,8 @@ body{background:linear-gradient(180deg,#EEF4FF 0%,#FFFFFF 55%);color:#1B2333;fon
 #app{display:flex;flex-direction:column;gap:clamp(8px,1.4vh,14px);height:100dvh;max-width:1120px;margin:0 auto;padding:clamp(10px,1.6vh,18px) 12px clamp(12px,2vh,20px)}
 .pill{background:#fff;border-radius:12px;padding:6px 10px;font-size:13px;color:#55607A;box-shadow:0 1px 3px rgba(30,50,90,.1)}
 .pill b{color:#1B2333;font-size:15px}
-#top{display:flex;align-items:center;justify-content:space-between;height:40px;flex:none}
+#top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 14px;min-height:40px;flex:none}
+@media (max-width:560px){#top .m{order:3;flex-basis:100%;justify-content:center;gap:10px}#top .l{gap:8px}}
 #top .l{display:flex;gap:6px}
 #top .m{display:flex;align-items:center;gap:6px;font-size:12px;color:#55607A}
 #score{font:800 22px 'Outfit',sans-serif;color:#15803D}
