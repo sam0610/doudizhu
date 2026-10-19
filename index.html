@@ -14,7 +14,7 @@ body{background:linear-gradient(180deg,#EEF4FF 0%,#FFFFFF 55%);color:#1B2333;fon
 .pill{background:#fff;border-radius:12px;padding:6px 10px;font-size:13px;color:#55607A;box-shadow:0 1px 3px rgba(30,50,90,.1)}
 .pill b{color:#1B2333;font-size:15px}
 #top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 14px;min-height:40px;flex:none}
-@media (max-width:560px){#top .m{order:3;flex-basis:100%;justify-content:center;gap:10px}#top .l{gap:8px}#top.hb .m{display:none}}
+@media (max-width:560px){#top .m{order:3;flex-basis:100%;justify-content:center;gap:10px}#top .l{gap:8px}#top.hb .m{order:0;flex-basis:auto}}
 #top .l{display:flex;gap:6px}
 #top .m{display:flex;align-items:center;gap:6px;font-size:12px;color:#55607A}
 #score{font:800 22px 'Outfit',sans-serif;color:#15803D}
@@ -40,9 +40,6 @@ body{background:linear-gradient(180deg,#EEF4FF 0%,#FFFFFF 55%);color:#1B2333;fon
 #table{flex:1;min-height:0;border-radius:24px;background:#EAF1FF;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(8px,1.6vh,16px);padding:10px;text-align:center;overflow:hidden}
 #table .cap{font-size:13px;color:#55607A}
 #table .big{background:#fff;border-radius:999px;padding:6px 18px;font-weight:700;font-size:16px;box-shadow:0 1px 3px rgba(30,50,90,.1)}
-#table{position:relative}
-#table .bm{position:absolute;top:10px;right:12px;display:flex;gap:3px;opacity:.9}
-@media (min-width:561px){#table .bm{display:none}}
 #table .big.y{background:#FFD43B;color:#4A3500;box-shadow:0 2px 6px rgba(120,90,0,.25)}
 #table .big.ov{position:absolute;left:50%;transform:translate(-50%,-50%);z-index:99;white-space:nowrap;font-size:18px;padding:7px 22px;box-shadow:0 4px 12px rgba(80,60,0,.35)}
 #table .hint{font-size:13px;color:#55607A;line-height:1.5}
@@ -350,7 +347,7 @@ function renderTop(){
   $('#top').classList.toggle('hb',S.phase=='play'||S.phase=='end');
   const bt=$('#bottom');bt.innerHTML='';
   S.bottom.forEach(c=>{
-    if(S.landlord>=0)bt.appendChild(cardEl(c,.5,true));
+    if(S.landlord>=0)bt.appendChild(cardEl(c,innerWidth<=560?.4:.5,true));
     else{const d=document.createElement('div');d.className='cd rel back';d.style.setProperty('--k',.5);bt.appendChild(d);}
   });
   const sc=S.scores[0];$('#score').textContent=(sc>0?'+':'')+sc;$('#score').className=sc<0?'neg':'';
@@ -403,13 +400,6 @@ function renderTable(){
     t.innerHTML=`<div class="cap">新一輪</div><div class="big">${S.turn==0?'你先出牌':NAMES[S.turn]+'先出牌'}</div><div class="hint">可以出任何合法牌型</div>`;
   }
 }
-function addBM(){
-  const t=$('#table');
-  if(S.phase!='play'||S.landlord<0)return;
-  const d=document.createElement('div');d.className='bm';d.title='底牌';
-  S.bottom.forEach(c=>d.appendChild(cardEl(c,.38,true)));
-  t.appendChild(d);
-}
 function renderStatus(){
   const inGame=(S.phase=='bid'||S.phase=='play'),me=roleOf(0);
   const txt=!inGame?'':S.phase=='bid'?'最高分者當地主':(S.turn==0?'輪到你出牌':NAMES[S.turn]+'思考中…');
@@ -452,7 +442,7 @@ function renderBtns(){
   else{add('不出',humanPass,!S.last);add('提示',humanHint);add('出牌',humanPlay,false,'pri');}
 }
 function render(){
-  renderTop();chip(1);chip(2);renderStatus();renderBtns();renderHand();renderTable();addBM();
+  renderTop();chip(1);chip(2);renderStatus();renderBtns();renderHand();renderTable();
   if(S.phase=='end'){
     const r=S.result,me=r.lw?S.landlord==0:S.landlord!=0;
     $('#ovt').textContent=me?'🎉 你贏了':'😢 你輸了';
