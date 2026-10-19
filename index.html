@@ -378,7 +378,7 @@ function renderTable(){
     const gp=parseFloat(getComputedStyle(t).gap)||12;
     const chrome=kids.reduce((a,x)=>a+(x.offsetHeight||34),0)+gp*kids.length;
     const availH=Math.max(90,(t.clientHeight||330)-20-chrome);
-    const STEP=.6,ROWH=.8,ASP=1.4375,maxW=n<=4?110:84;
+    const STEP=.6,ROWH=.8,ASP=1.4375,phone=innerWidth<=560,maxW=phone?(n<=4?76:58):(n<=4?110:84);
     let best=null;
     for(let r=1;r<=3;r++){
       const m=Math.ceil(n/r);
@@ -395,7 +395,7 @@ function renderTable(){
       d.style.left=((best.m-inRow)*step/2+col*step)+'px';d.style.top=(row*ch*ROWH)+'px';d.style.zIndex=col+1;
       box.appendChild(d);
     });
-    if(n>=3){const lb=document.createElement('div');lb.className='big y ov';lb.textContent=typeText(L.a);lb.style.top=(H-ch*.22)+'px';box.appendChild(lb);}
+    if(n>=3){const lb=document.createElement('div');lb.className='big y ov';lb.textContent=typeText(L.a);lb.style.top=(H-4)+'px';box.appendChild(lb);}
   }else{
     t.innerHTML=`<div class="cap">新一輪</div><div class="big">${S.turn==0?'你先出牌':NAMES[S.turn]+'先出牌'}</div><div class="hint">可以出任何合法牌型</div>`;
   }
