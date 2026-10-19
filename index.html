@@ -23,6 +23,8 @@ body{background:linear-gradient(180deg,#EEF4FF 0%,#FFFFFF 55%);color:#1B2333;fon
 .chip{flex:1;background:#fff;border-radius:18px;padding:10px 12px;box-shadow:0 2px 8px rgba(30,50,90,.08);display:flex;flex-direction:column;justify-content:space-between;min-width:0}
 .chip.turn{box-shadow:0 0 0 2px #2557E6,0 2px 8px rgba(30,50,90,.08)}
 .chip .who{display:flex;align-items:center;gap:8px}
+.chip .sc{margin-left:auto;font:800 17px 'Outfit',sans-serif;color:#15803D;background:#EAF7EF;border-radius:10px;padding:2px 8px}
+.chip .sc.neg{color:#D92D3A;background:#FDECEE}
 .chip .av{width:34px;height:34px;border-radius:17px;display:flex;align-items:center;justify-content:center;font:800 16px 'Outfit',sans-serif;flex:none}
 .chip .nm{display:flex;flex-direction:column;line-height:1.25;min-width:0}
 .chip .nm span:first-child{font-size:14px;font-weight:700}
@@ -76,6 +78,7 @@ body{background:linear-gradient(180deg,#EEF4FF 0%,#FFFFFF 55%);color:#1B2333;fon
   #handbox{grid-area:hand}
   .chip{height:auto;justify-content:center;align-items:center;gap:16px;text-align:center}
   .chip .who{flex-direction:column;gap:6px}
+  .chip .sc{margin-left:0}
   .chip .nm{align-items:center}
   .chip .bt{flex-direction:column;align-items:center;gap:10px}
   .chip .num b{font-size:48px}
@@ -329,7 +332,8 @@ function chip(seat){
   const avBg=isL?'#FFE9B8':(S.landlord<0?'#E8ECF4':'#DCEBFF');
   const roleColor=isL?'#8A5A00':'#1F4FC4';
   el.innerHTML=`<div class="who"><div class="av" style="background:${avBg};color:#1F4FC4">${isL?CROWN:(seat==1?'A':'B')}</div>`+
-    `<div class="nm"><span>${NAMES[seat]}</span><span style="color:${roleColor}">${role||'&nbsp;'}</span></div></div>`+
+    `<div class="nm"><span>${NAMES[seat]}</span><span style="color:${roleColor}">${role||'&nbsp;'}</span></div>`+
+    `<span class="sc${S.scores[seat]<0?' neg':''}">${S.scores[seat]>0?'+':''}${S.scores[seat]}</span></div>`+
     `<div class="bt"><div class="num"><b>${n}</b><span>張</span></div>${st?`<span class="tag ${cls}">${st}</span>`:''}</div>`;
 }
 function renderTop(){
