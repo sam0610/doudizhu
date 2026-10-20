@@ -92,24 +92,60 @@ body{background:linear-gradient(180deg,#EEF4FF 0%,#FFFFFF 55%);color:#1B2333;fon
   .chip .av{width:48px;height:48px;border-radius:24px;font-size:20px}
 }
 
-#lobby{position:fixed;inset:0;background:rgba(238,244,255,.97);display:flex;align-items:center;justify-content:center;padding:20px;z-index:300;overflow:auto}
-#lobby .box{background:#fff;border-radius:24px;padding:26px 22px;width:min(360px,100%);box-sizing:border-box;text-align:center;box-shadow:0 20px 50px rgba(30,50,90,.18);display:flex;flex-direction:column;gap:10px}
-#lobby h2{margin:0 0 6px;font-size:28px}
-#lobby input{width:100%;box-sizing:border-box;height:46px;border:1.5px solid #D9E1EE;border-radius:14px;padding:0 14px;font:700 17px 'Noto Sans TC',system-ui,sans-serif;color:#1B2333;background:#fff;outline:none}
+#lobby{position:fixed;inset:0;background:linear-gradient(135deg,#EAF1FF 0%,#F8FAFF 60%,#FFF8DC 100%);display:flex;padding:20px;z-index:300;overflow:auto}
+#lobby .wrap{margin:auto;width:100%;max-width:1000px;display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,420px);gap:clamp(24px,6vw,80px);align-items:center}
+#lobby .brand{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+#lobby .ttl{font:900 clamp(64px,11vw,132px)/1 'Noto Sans TC',system-ui,sans-serif;letter-spacing:.02em;color:#1B2333}
+#lobby .ttl i{font-style:normal;background:linear-gradient(transparent 68%,#FFD43B 68%)}
+#lobby .sub{font-size:14px;letter-spacing:.06em;color:#55607A;margin-bottom:18px}
+#lobby .fan{display:flex;align-items:flex-end;padding-left:6px;height:140px}
+#lobby .lc{position:relative;width:72px;height:100px;box-sizing:border-box;margin-left:-4px;background:#fff;border:1px solid #D9E1EE;border-radius:12px;box-shadow:0 6px 14px rgba(30,50,90,.18);color:#1B2333;font-style:normal;transform:translateY(var(--y,0)) rotate(var(--r,0deg));flex:none}
+#lobby .lc:first-child{margin-left:0}
+#lobby .lc.red{color:#D92D3A}
+#lobby .lc b{position:absolute;left:9px;top:7px;font:800 30px/1 'Outfit','Noto Sans TC',sans-serif;letter-spacing:-.04em}
+#lobby .lc u{position:absolute;left:10px;top:44px;font-size:28px;line-height:1;text-decoration:none}
+#lobby .lc.jk{color:#2557E6}
+#lobby .lc.jk.red{color:#D92D3A}
+#lobby .lc.jk b{font-size:26px;font-family:'Noto Sans TC',sans-serif;font-weight:900;top:9px}
+#lobby .lc.jk u{font-size:26px;font-family:'Noto Sans TC',sans-serif;font-weight:900;top:44px}
+#lobby .lc.crown{width:84px;height:116px;z-index:2;display:flex;align-items:center;justify-content:center;margin-left:-4px}
+#lobby .lc.crown span{width:56px;height:56px;border-radius:28px;background:#FFD43B;display:flex;align-items:center;justify-content:center}
+#lobby .box{background:#fff;border-radius:28px;padding:8px 22px;box-sizing:border-box;box-shadow:0 20px 50px rgba(30,50,90,.16);display:flex;flex-direction:column}
+#lobby .sec{display:flex;flex-direction:column;gap:10px;padding:16px 0;border-top:1px solid #E6EBF4}
+#lobby .sec:first-child{border-top:0}
+#lobby .st{font-weight:700;font-size:15px;color:#1B2333}
+#lobby input{width:100%;box-sizing:border-box;height:46px;border:1.5px solid #D9E1EE;border-radius:14px;padding:0 14px;font:500 16px 'Noto Sans TC',system-ui,sans-serif;color:#1B2333;background:#fff;outline:none}
 #lobby input:focus{border-color:#2557E6}
 #lobby .btn{flex:none;width:100%;height:48px;border:1px solid #E3E9F4;font-size:16px}
 #lobby .btn.pri{border:0}
+#lobby .btn.dk{background:#1B2333;color:#fff;border:0;box-shadow:none}
+#lobby .btn.sm{width:auto;height:36px;padding:0 14px;font-size:14px;align-self:flex-start;border-radius:12px}
 #lobby .join{display:flex;gap:8px}
-#lobby .join input{flex:1;min-width:0;text-transform:uppercase;letter-spacing:.2em;text-align:center}
-#lobby .join .btn{width:96px}
-#lobby .code{font:800 40px 'Outfit',sans-serif;letter-spacing:.18em;color:#2557E6}
-#lobby .cap2{font-size:13px;color:#55607A}
-#lobby ul{list-style:none;margin:4px 0;padding:0;display:flex;flex-direction:column;gap:8px}
+#lobby .join input{flex:1;min-width:0;text-transform:uppercase;letter-spacing:.2em;text-align:center;font-weight:700}
+#lobby .join input::placeholder{letter-spacing:0;font-weight:400;text-transform:none}
+#lobby .join .btn{width:84px}
+#lobby .help{font-size:13px;line-height:1.55;color:#55607A;margin:0}
+#lobby .code{font:800 40px 'Outfit',sans-serif;letter-spacing:.18em;color:#2557E6;text-align:center}
+#lobby .cap2{font-size:13px;color:#55607A;text-align:center}
+#lobby ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
 #lobby li{display:flex;justify-content:space-between;align-items:center;background:#F3F6FB;border-radius:12px;padding:10px 14px;font-weight:700}
 #lobby li span:last-child{font-size:12px;color:#55607A;font-weight:500}
-#lobby .msg{font-size:14px;color:#55607A;min-height:20px;line-height:1.5}
+#lobby .msg{font-size:14px;color:#55607A;line-height:1.5;text-align:center}
+#lobby .msg:empty{display:none}
 #lobby .msg.err{color:#D92D3A}
-#lobby .lbl{display:flex;flex-direction:column;gap:6px;text-align:left;font-size:13px;color:#55607A}
+#lobby .lbl{display:flex;flex-direction:column;gap:8px;font-size:15px;font-weight:700;color:#1B2333}
+#rules{position:fixed;inset:0;background:rgba(20,30,50,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:500}
+#rules .box{background:#fff;border-radius:22px;padding:22px;width:min(420px,100%);max-height:86vh;overflow:auto;box-sizing:border-box;line-height:1.6;font-size:14px;color:#1B2333;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+#rules h3{margin:0 0 8px;font-size:20px}
+#rules h4{margin:12px 0 4px;font-size:15px}
+#rules ul{margin:0;padding-left:20px}
+#rules .btn{margin-top:14px;width:100%;height:46px;flex:none}
+@media (max-width:760px){
+  #lobby .wrap{grid-template-columns:minmax(0,1fr);gap:16px}
+  #lobby .brand{align-items:center;text-align:center}
+  #lobby .sub{margin-bottom:8px}
+  #lobby .fan{transform:scale(.8);transform-origin:center bottom;height:118px;padding-left:0}
+}
 </style>
 </head>
 <body>
@@ -126,23 +162,49 @@ body{background:linear-gradient(180deg,#EEF4FF 0%,#FFFFFF 55%);color:#1B2333;fon
   <div id="handbox"></div>
 </div>
 <div id="toast"></div>
-<div id="lobby"><div class="box">
-<h2>鬥地主</h2>
-<div id="lbMenu" style="display:flex;flex-direction:column;gap:10px">
-<label class="lbl">你的名字<input id="nameIn" maxlength="8" placeholder="輸入名字" autocomplete="off"></label>
-<button class="btn pri" id="bSolo" type="button">單人練習(對電腦)</button>
-<button class="btn" id="bHost" type="button">開房間(邀請家人)</button>
-<div class="join"><input id="codeIn" maxlength="6" placeholder="房間代碼" autocapitalize="characters" autocomplete="off"><button class="btn" id="bJoin" type="button">加入</button></div>
+<div id="lobby"><div class="wrap">
+<div class="brand">
+<div class="ttl">鬥<i>地</i>主</div>
+<div class="sub">DOU DIZHU ・ 3 人 ・ 可網上對戰</div>
+<div class="fan" aria-hidden="true">
+<i class="lc jk" style="--r:-14deg;--y:10px"><b>小</b><u>王</u></i>
+<i class="lc" style="--r:-7deg;--y:2px"><b>A</b><u>♠</u></i>
+<i class="lc crown" style="--r:0deg;--y:-4px"><span><svg width="30" height="30" viewBox="0 0 24 24" fill="#5C3B00"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5L3 8z"/></svg></span></i>
+<i class="lc red" style="--r:7deg;--y:2px"><b>A</b><u>♥</u></i>
+<i class="lc jk red" style="--r:14deg;--y:10px"><b>大</b><u>王</u></i>
 </div>
-<div id="lbRoom" style="display:none;flex-direction:column;gap:10px">
-<div class="cap2">房間代碼</div><div id="roomCode" class="code"></div>
-<button class="btn" id="bCopy" type="button">複製邀請連結</button>
-<ul id="seatList"></ul>
+</div>
+<div class="box">
+<div id="lbMenu" style="display:flex;flex-direction:column">
+<div class="sec"><label class="lbl">你的名字<input id="nameIn" maxlength="8" placeholder="輸入名字" autocomplete="off"></label></div>
+<div class="sec"><div class="st">單人對電腦</div><button class="btn pri" id="bSolo" type="button">開始單人遊戲</button></div>
+<div class="sec" id="lbOnline"><div class="st">線上對戰</div>
+<button class="btn dk" id="bHost" type="button">建立房間</button>
+<div class="join"><input id="codeIn" maxlength="6" placeholder="輸入 5 位代碼" autocapitalize="characters" autocomplete="off"><button class="btn" id="bJoin" type="button">加入</button></div>
+<p class="help">建立後把 5 位代碼或邀請連結傳給家人,對方打開網址輸入代碼就能加入。房主要保持此頁開著;空位由電腦補上。</p></div>
+<div class="sec"><button class="btn sm" id="bRules" type="button">遊戲規則</button></div>
+</div>
+<div id="lbRoom" style="display:none;flex-direction:column">
+<div class="sec"><div class="cap2">房間代碼</div><div id="roomCode" class="code"></div>
+<button class="btn" id="bCopy" type="button">複製邀請連結</button></div>
+<div class="sec"><div class="st">座位</div><ul id="seatList"></ul></div>
+<div class="sec">
 <button class="btn pri" id="bStart" type="button">開始遊戲(空位由電腦補上)</button>
 <div id="lbWait" class="msg" style="display:none">等待房主開始遊戲…</div>
-<button class="btn" id="bLeave" type="button">離開</button>
+<button class="btn" id="bLeave" type="button">離開</button></div>
 </div>
-<div id="lbMsg" class="msg"></div>
+<div id="lbMsg" class="msg" style="padding-bottom:12px"></div>
+</div>
+</div></div>
+<div id="rules"><div class="box">
+<h3>遊戲規則</h3>
+<h4>發牌與叫分</h4>
+<ul><li>3 人、54 張牌:每人 17 張,另留 3 張底牌。</li><li>輪流叫分:不叫、1 分、2 分、3 分;叫 3 分或三人都叫完,最高分者當地主並拿走底牌。</li><li>三人都不叫:重新發牌。</li></ul>
+<h4>牌型</h4>
+<ul><li>單張、對子、三條、三帶一、三帶二</li><li>順子(5 張起,不含 2 和王)、連對(3 對起)</li><li>飛機(連續三條,可帶單張或對子)、四帶二、四帶兩對</li><li>炸彈(四張同點)可壓任何牌型;王炸(大小王)最大。</li></ul>
+<h4>輸贏與計分</h4>
+<ul><li>地主先出完牌,地主勝;任一農民先出完,農民勝。</li><li>倍數 = 叫分;每出一個炸彈或王炸再 ×2;春天(對方一手都未出)再 ×2。</li><li>地主勝:地主 +2×倍數,兩個農民各 −倍數;地主敗則相反。</li></ul>
+<button class="btn pri" id="bRulesClose" type="button">明白了</button>
 </div></div>
 
 <div id="ov"><div class="box"><h2 id="ovt"></h2><div id="ovd"></div><button class="btn pri" onclick="again()">再來一局</button></div></div>
@@ -455,8 +517,10 @@ function lobbyInit(){
     const done=()=>say('已複製邀請連結,傳給家人就得');
     try{navigator.clipboard.writeText(link).then(done,()=>say(link));}catch(e){say(link);}
   };
+  $('#bRules').onclick=()=>{$('#rules').style.display='flex';};
+  $('#bRulesClose').onclick=()=>{$('#rules').style.display='none';};
   if(window.claude){   // Claude Artifact 預覽環境不能連線
-    $('#bHost').style.display='none';document.querySelector('#lobby .join').style.display='none';
+    $('#lbOnline').style.display='none';
     say('線上對戰請用 GitHub Pages 版;這裡只能單人練習');
   }
 }
