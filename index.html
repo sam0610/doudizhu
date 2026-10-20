@@ -54,6 +54,7 @@ body{background:linear-gradient(180deg,#EEF4FF 0%,#FFFFFF 55%);color:#1B2333;fon
 .btn{flex:1 1 0;min-width:0;border:0;border-radius:16px;background:#fff;color:#1B2333;font:700 17px 'Noto Sans TC',system-ui,sans-serif;box-shadow:0 1px 4px rgba(30,50,90,.14);cursor:pointer}
 .btn.pri{background:#2557E6;color:#fff;font-size:18px;box-shadow:0 6px 12px rgba(37,87,230,.3)}
 .btn:disabled{opacity:.35;cursor:default}
+.btn.yel{background:#FFD43B;color:#4A3500;box-shadow:0 4px 10px rgba(180,140,0,.28)}
 .tb{display:flex;gap:10px;width:100%;max-width:420px}
 .tbtn{flex:1 1 0;min-width:0;height:clamp(64px,10vh,88px);border:0;border-radius:20px;background:#fff;color:#1B2333;font:800 24px 'Noto Sans TC',system-ui,sans-serif;box-shadow:0 1px 4px rgba(30,50,90,.14);cursor:pointer}
 .tbtn.pri{background:#2557E6;color:#fff;box-shadow:0 8px 16px rgba(37,87,230,.3)}
@@ -634,7 +635,7 @@ function renderBtns(){
   if(S.turn!=0||(S.phase!='bid'&&S.phase!='play'))return;
   const add=(t,fn,dis,cls)=>{const x=document.createElement('button');x.className='btn'+(cls?' '+cls:'');x.textContent=t;x.disabled=!!dis;x.onclick=fn;b.appendChild(x);};
   if(S.phase=='bid'){add('不叫',()=>bid(0));for(let i=1;i<=3;i++)add(i+'分',()=>bid(i),i<=S.highBid,i==3?'pri':'');}
-  else{add('不出',humanPass,!S.last);add('提示',humanHint);add('取消',clearSel,S.sel.size==0);add('出牌',humanPlay,false,'pri');}
+  else{add('不出',humanPass,!S.last);add('提示',humanHint);add('取消',clearSel,S.sel.size==0,'yel');add('出牌',humanPlay,false,'pri');}
 }
 function render(){
   renderTop();chip(1);chip(2);renderStatus();renderBtns();renderHand();renderTable();
