@@ -133,6 +133,13 @@ body{background:linear-gradient(180deg,#EEF4FF 0%,#FFFFFF 55%);color:#1B2333;fon
 #lobby .msg:empty{display:none}
 #lobby .msg.err{color:#D92D3A}
 #lobby .lbl{display:flex;flex-direction:column;gap:8px;font-size:15px;font-weight:700;color:#1B2333}
+#pwm{position:fixed;inset:0;background:rgba(20,30,50,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:600}
+#pwm .pb{background:#fff;border-radius:22px;padding:22px;width:min(340px,100%);box-sizing:border-box;color:#1B2333;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+#pwm h3{margin:0 0 4px;font-size:20px}#pwm p{margin:0 0 12px;font-size:13px;color:#6B7893}
+#pwm input{width:100%;height:48px;box-sizing:border-box;border:1.5px solid #D7DEEC;border-radius:14px;padding:0 14px;font-size:20px;letter-spacing:6px;text-align:center}
+#pwm .pe{min-height:20px;margin-top:8px;font-size:13px;color:#D93025;text-align:center}
+#pwm .pr{display:flex;gap:10px}#pwm .btn{margin-top:6px;height:46px;flex:1}
+#pwm.bad input{border-color:#D93025}
 #rules{position:fixed;inset:0;background:rgba(20,30,50,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:500}
 #rules .box{background:#fff;border-radius:22px;padding:22px;width:min(420px,100%);max-height:86vh;overflow:auto;box-sizing:border-box;line-height:1.6;font-size:14px;color:#1B2333;box-shadow:0 20px 50px rgba(0,0,0,.25)}
 #rules h3{margin:0 0 8px;font-size:20px}
@@ -177,7 +184,6 @@ body{background:linear-gradient(180deg,#EEF4FF 0%,#FFFFFF 55%);color:#1B2333;fon
 <div id="lbMenu" style="display:flex;flex-direction:column">
 <div id="bResumeSec" style="display:none;padding:14px 0 2px"><button class="btn pri" id="bResume" type="button"></button></div>
 <div class="sec"><label class="lbl">你的名字<input id="nameIn" maxlength="8" placeholder="輸入名字" autocomplete="off"></label></div>
-<div class="sec" id="pwSec"><label class="lbl">開始密碼<input id="pwIn" type="password" inputmode="numeric" maxlength="12" placeholder="輸入密碼才可開始或開房" autocomplete="off"></label></div>
 <div class="sec"><div class="st">單人對電腦</div><button class="btn pri" id="bSolo" type="button">開始單人遊戲</button></div>
 <div class="sec" id="lbOnline"><div class="st">線上對戰</div>
 <button class="btn dk" id="bHost" type="button">建立房間</button>
@@ -197,6 +203,7 @@ body{background:linear-gradient(180deg,#EEF4FF 0%,#FFFFFF 55%);color:#1B2333;fon
 <div id="lbMsg" class="msg" style="padding-bottom:12px"></div>
 </div>
 </div></div>
+<div id="pwm"><div class="pb"><h3>輸入密碼</h3><p>輸入密碼才可開始遊戲或建立房間</p><input id="pwIn" type="password" inputmode="numeric" maxlength="12" autocomplete="off"><div class="pe" id="pwErr"></div><div class="pr"><button class="btn" id="pwNo" type="button">取消</button><button class="btn pri" id="pwGo" type="button">確定</button></div></div></div>
 <div id="rules"><div class="box">
 <h3>遊戲規則</h3>
 <h4>發牌與叫分</h4>
@@ -623,9 +630,13 @@ function lobbyInit(){
   if(room){$('#codeIn').value=room;say('輸入名字後按「加入」');}
   const sess=loadSess();
   if(sess&&!window.claude){$('#bResumeSec').style.display='block';$('#bResume').textContent='回到房間 '+sess.code+(sess.role=='host'?'(房主)':'');}
-  const PW='5362',pwOk=()=>{let ok=false;try{ok=localStorage.getItem('ddz_pw')===PW}catch(e){}if(ok)return true;if($('#pwIn').value.trim()===PW){try{localStorage.setItem('ddz_pw',PW)}catch(e){}$('#pwSec').style.display='none';return true;}say('請先輸入正確密碼',true);$('#pwIn').focus();return false;};
-  try{if(localStorage.getItem('ddz_pw')===PW)$('#pwSec').style.display='none';}catch(e){}
-  $('#bSolo').onclick=()=>{if(pwOk())startSolo()};$('#bHost').onclick=()=>{if(pwOk())hostRoom()};$('#bJoin').onclick=joinRoom;$('#bResume').onclick=resumeRoom;
+  const PW='5362';let pwCb=null;
+  const pwSaved=()=>{try{return localStorage.getItem('ddz_pw')===PW}catch(e){return false}};
+  const pwClose=()=>{$('#pwm').style.display='none';$('#pwm').classList.remove('bad');pwCb=null;};
+  const needPw=cb=>{if(pwSaved()){cb();return;}pwCb=cb;$('#pwIn').value='';$('#pwErr').textContent='';$('#pwm').style.display='flex';setTimeout(()=>$('#pwIn').focus(),50);};
+  const pwTry=()=>{if($('#pwIn').value.trim()===PW){try{localStorage.setItem('ddz_pw',PW)}catch(e){}const cb=pwCb;pwClose();if(cb)cb();}else{$('#pwErr').textContent='密碼不正確';$('#pwm').classList.add('bad');$('#pwIn').value='';$('#pwIn').focus();}};
+  $('#pwGo').onclick=pwTry;$('#pwNo').onclick=pwClose;$('#pwIn').onkeydown=e=>{if(e.key==='Enter')pwTry();};
+  $('#bSolo').onclick=()=>needPw(startSolo);$('#bHost').onclick=()=>needPw(hostRoom);$('#bJoin').onclick=joinRoom;$('#bResume').onclick=resumeRoom;
   $('#bStart').onclick=startOnline;$('#bLeave').onclick=leaveRoom;
   $('#bRules').onclick=()=>{$('#rules').style.display='flex';};
   $('#bRulesClose').onclick=()=>{$('#rules').style.display='none';};
