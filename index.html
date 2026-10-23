@@ -177,6 +177,7 @@ body{background:linear-gradient(180deg,#EEF4FF 0%,#FFFFFF 55%);color:#1B2333;fon
 <div id="lbMenu" style="display:flex;flex-direction:column">
 <div id="bResumeSec" style="display:none;padding:14px 0 2px"><button class="btn pri" id="bResume" type="button"></button></div>
 <div class="sec"><label class="lbl">你的名字<input id="nameIn" maxlength="8" placeholder="輸入名字" autocomplete="off"></label></div>
+<div class="sec" id="pwSec"><label class="lbl">開始密碼<input id="pwIn" type="password" inputmode="numeric" maxlength="12" placeholder="輸入密碼才可開始或開房" autocomplete="off"></label></div>
 <div class="sec"><div class="st">單人對電腦</div><button class="btn pri" id="bSolo" type="button">開始單人遊戲</button></div>
 <div class="sec" id="lbOnline"><div class="st">線上對戰</div>
 <button class="btn dk" id="bHost" type="button">建立房間</button>
@@ -622,7 +623,9 @@ function lobbyInit(){
   if(room){$('#codeIn').value=room;say('輸入名字後按「加入」');}
   const sess=loadSess();
   if(sess&&!window.claude){$('#bResumeSec').style.display='block';$('#bResume').textContent='回到房間 '+sess.code+(sess.role=='host'?'(房主)':'');}
-  $('#bSolo').onclick=startSolo;$('#bHost').onclick=hostRoom;$('#bJoin').onclick=joinRoom;$('#bResume').onclick=resumeRoom;
+  const PW='5362',pwOk=()=>{let ok=false;try{ok=localStorage.getItem('ddz_pw')===PW}catch(e){}if(ok)return true;if($('#pwIn').value.trim()===PW){try{localStorage.setItem('ddz_pw',PW)}catch(e){}$('#pwSec').style.display='none';return true;}say('請先輸入正確密碼',true);$('#pwIn').focus();return false;};
+  try{if(localStorage.getItem('ddz_pw')===PW)$('#pwSec').style.display='none';}catch(e){}
+  $('#bSolo').onclick=()=>{if(pwOk())startSolo()};$('#bHost').onclick=()=>{if(pwOk())hostRoom()};$('#bJoin').onclick=joinRoom;$('#bResume').onclick=resumeRoom;
   $('#bStart').onclick=startOnline;$('#bLeave').onclick=leaveRoom;
   $('#bRules').onclick=()=>{$('#rules').style.display='flex';};
   $('#bRulesClose').onclick=()=>{$('#rules').style.display='none';};
